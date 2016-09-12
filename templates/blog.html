@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for findAnotherArticle in rendTheBlogs %}  <!-- newArticle is new variable here, no previous reference  -->
+    <div class="bloggy">
+      <div class="bloggyTitle">
+        {{findAnotherArticle.title}}
+      </div>
+      <pre class="bloggybody">
+        {{findAnotherArticle.article}}
+      </pre>
+    </div>
+  {% endfor %}
+
+
+{% endblock %}
