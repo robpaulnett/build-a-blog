@@ -47,10 +47,17 @@ class MainPage(MainHandler):
     def get(self):
         self.render_base()
 
+    def post(self):
+        self.render_base()
 
 class CreateApost(MainHandler):
+    def render_newpost(self, title="", article="", error=""):
+        #theblogs = db.GqlQuery("SELECT * FROM Entry order by created ASC")    #theblogs is the "cursor"
+        self.render("newpost.html", rendTitle=title, rendArticle=article, rendError=error)  #orange are what we reference in template
+
+
     def get(self):
-        self.render_base()
+        self.render_newpost()
 
     def post(self):
         postTitle = self.request.get("title")   #  "title" is from the name on the form
@@ -59,16 +66,28 @@ class CreateApost(MainHandler):
         if postTitle and postArticle:
             blogOutput = Entry(title = postTitle, article = postArticle)    #self.write("thanks, for now")
             blogOutput.put()
-            self.redirect("/blog")
+            self.redirect("/newpost")
         else:
             postError = "please create a title and a article"
-            self.render_base(postTitle, postArticle, postError)
+            self.render_newpost(postTitle, postArticle, postError)
 
-#class RecentPost(MainHandler):
+class RecentPost(MainHandler):
+    def render_allposts(self, title="", article="", error=""):
+        theblogs = db.GqlQuery("SELECT * FROM Entry order by created DESC LIMIT 5")    #theblogs is the "cursor"
+        self.render("blog.html", rendTitle=title, rendArticle=article, rendError=error, rendTheBlogs=theblogs)  #orange are what we reference in template
 
+    def get(self):
+        self.render_allposts()
+
+    def post(self):
+        rendTitle = self.request.get("title")
+        rendArticle = self.request.get("art")
+        self.render_allposts(rendTitle, rendArticle)
 
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage)
+    ('/', MainPage),
+    ('/newpost', CreateApost),
+    ('/blog', RecentPost)
 ], debug=True)
