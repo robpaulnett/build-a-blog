@@ -66,7 +66,7 @@ class CreateApost(MainHandler):
         if postTitle and postArticle:
             blogOutput = Entry(title = postTitle, article = postArticle)    #self.write("thanks, for now")
             blogOutput.put()
-            self.redirect("/newpost")
+            self.redirect("/permalinks/%s" % blogOutput.key().id())
         else:
             postError = "please create a title and a article"
             self.render_newpost(postTitle, postArticle, postError)
