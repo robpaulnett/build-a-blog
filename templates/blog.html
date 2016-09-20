@@ -2,11 +2,12 @@
 
 {% block content %}
 
-
-{% for findAnotherArticle in rendTheBlogs %}  <!-- newArticle is new variable here, no previous reference  -->
+<!-- "findAnotherArticle" is new variable here, no previous reference  -->
+{% for findAnotherArticle in rendTheBlogs %}
     <div class="bloggy">
       <div class="bloggyTitle">
-      {{findAnotherArticle.title}}
+        <!-- turn this into a link when getting ID portion   -->
+        <a href="/permalinks/{{findAnotherArticle.key().id()}}">{{findAnotherArticle.title}}</a>
       </div>
       <pre class="bloggybody">
         {{findAnotherArticle.article}}

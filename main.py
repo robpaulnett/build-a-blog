@@ -81,13 +81,22 @@ class RecentPost(MainHandler):
 
     def post(self):
         rendTitle = self.request.get("title")
-        rendArticle = self.request.get("art")
+        rendArticle = self.request.get("article")
         self.render_allposts(rendTitle, rendArticle)
 
-
+class ViewPostHandler(MainHandler):
+    def get(self, id):
+        idEntry = Entry.get_by_id(int(id))
+        #self.response.write(templates.render("permalinks", idEntry))
+        if not idEntry:
+            self.render("permalinks.html", idEntry=idEntry, error="Cannot find that blog entry")
+        else:
+            self.render("permalinks.html", idEntry=idEntry)
+        #self.response.write(5910974510923776)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/newpost', CreateApost),
-    ('/blog', RecentPost)
+    ('/blog', RecentPost),
+    (webapp2.Route('/permalinks/<id:\d+>', ViewPostHandler))
 ], debug=True)
